@@ -146,7 +146,7 @@
       </div>
       <div class="form-group">
         <label for="sn">Serial No</label>
-        <input id="sn" type="text" class="form-control" placeholder="e.g. 053636236">
+        <input id="sn" type="text" class="form-control" placeholder="e.g. 053636232">
       </div>
     </div>
 
@@ -160,7 +160,7 @@
 
 <script>
   var CERT = {
-    SerialNo: "053636236",
+    SerialNo: "053636232",
     ExporterName: "MARZNESHINAN SAFIR E SARAKHS CO",
     ExporterPostalCode: "",
     ExporterAddress: "NO. 17, AMIRKABIR ST., SARAKHS IRAN",
@@ -176,7 +176,7 @@
 
     CountryEnglishName: "China",
     SourceCountryEnglishName: "I.R. IRAN",
-    TConveyance11: "By Truck, No: 85396KBA / 855552AA",
+    TConveyance11: "By Truck, No: 85857GBA / 855150AA",
     EntryPoint: "CHINA",
 
     Products: [{
@@ -185,12 +185,12 @@
       NoOfPackages:          "2661",
       TypeOfPackagesName:    "Box",
       T1:                    "",
-      T2Gross:               "Gross:23538.6 Kg",
-      T2Net:                 "Net: 21942 Kg"
+      T2Gross:               "Gross: 22012 Kg",
+      T2Net:                 "Net: 20710 Kg"
     }],
 
     EnglishProvinceName: "West Azerbaijan",
-    IssueNo:             "2602040594517",
+    IssueNo:             "2602040594512",
     ConfirmDateString:   "Sunday, November 22, 2026",
     ConfirmerEnglishName: "Saman gabrieli",
     ConfirmerUserCode:    "204"
@@ -206,19 +206,16 @@
       String(d.getMonth()+1).padStart(2,"0") + "-" +
       String(d.getDate()).padStart(2,"0");
   }
-  /* UTC formatter: d=1795377600000 always → 2026-11-23 */
   function msToInputDateUTC(ms) {
     var d = new Date(ms);
     return d.getUTCFullYear() + "-" +
       String(d.getUTCMonth()+1).padStart(2,"0") + "-" +
       String(d.getUTCDate()).padStart(2,"0");
   }
-  /* Set date input robustly: clears first, sets, then re-sets after paint */
   function setDateInput(iso) {
     var el = document.getElementById("date");
     el.value = "";
     el.value = iso;
-    // Some browsers overwrite .value during their own init; re-apply.
     setTimeout(function () { el.value = iso; }, 0);
     setTimeout(function () { el.value = iso; }, 50);
   }
@@ -361,9 +358,8 @@
     }
   }
 
-  /* URL contract: ?d= is UTC midnight ms for the chosen day */
   function currentDateMs() {
-    var v = document.getElementById("date").value;   // yyyy-mm-dd
+    var v = document.getElementById("date").value;
     if (!v) return Date.now();
     var p = v.split("-");
     return Date.UTC(+p[0], +p[1]-1, +p[2]);
@@ -376,7 +372,6 @@
     var dMs = q.get("d") ? parseInt(q.get("d"),10) : Date.now();
     document.getElementById("sn").value = sn;
     document.getElementById("poi").value = poi;
-    /* UTC format + robust apply (see setDateInput) */
     setDateInput(msToInputDateUTC(dMs));
     return { sn: sn, poi: poi, dMs: dMs };
   }
@@ -393,7 +388,7 @@
     if (updateUrl) writeUrlParams(sn, poi, dMs);
     setResult("loading");
     setTimeout(function () {
-      if (sn === "053636236") setResult("found", sn, poi, dMs);
+      if (sn === "053636232") setResult("found", sn, poi, dMs);
       else setResult("notFound");
     }, 400);
   }
@@ -408,7 +403,6 @@
   });
 
   (function () {
-    // Default date = today (local); URL wins if ?d= is present.
     setDateInput(toInputDate(new Date()));
     var p = readUrlParams();
     if (p.sn) doSearch(p.sn, p.poi, p.dMs, false);
