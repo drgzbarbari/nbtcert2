@@ -146,7 +146,7 @@
       </div>
       <div class="form-group">
         <label for="sn">Serial No</label>
-        <input id="sn" type="text" class="form-control" placeholder="e.g. 053636232">
+        <input id="sn" type="text" class="form-control" placeholder="e.g. 053636236">
       </div>
     </div>
 
@@ -160,23 +160,24 @@
 
 <script>
   var CERT = {
-    SerialNo: "053636232",
-    ExporterName: "MARZNESHINAN SAFIR E SARAKHS CO",
-    ExporterPostalCode: "",
-    ExporterAddress: "NO. 17, AMIRKABIR ST., SARAKHS IRAN",
-    ExporterTel: "+985134527536",
+    SerialNo: "053636236",
+    ExporterName: "SEYEDEH FATEMEH KOOCHAKZADEH",
+    ExporterPostalCode: "2520106573",
+    ExporterAddress: "ALIABAD SHAMS, RONIZ, ESTAHBAN, IRAN",
+    ExporterTel: "",
 
     ConsigneeName: "Inner Mongolia Digital Trade Port",
     ConsigneeAddress:  "Import and Export Trading Co., Ltd",
     ConsigneeAddress2: "ADD: Room, Shared Office, st Floor, Standardized",
     ConsigneeAddress3: "Factory Building, Ordos Comperhensive Bonded Zone",
     ConsigneeAddress4: "Ejin Horo Banner",
-    ConsigneeAddress5: "Ordos CONTRACT NO: EX- IR- 20",
-    ConsigneeAddress6: "******************************************",
+    ConsigneeAddress5: "Ordos USCI: 91150627MAEMFR2X04",
+    ConsigneeAddress6: "Mr.Liu +86-13884634449 Email:928470002@qq.com",
+    ConsigneeAddress7: "******************************************",
 
     CountryEnglishName: "China",
     SourceCountryEnglishName: "I.R. IRAN",
-    TConveyance11: "By Truck, No: 85857GBA / 855150AA",
+    TConveyance11: "By Truck, No: 85396KBA / 855552AA",
     EntryPoint: "CHINA",
 
     Products: [{
@@ -185,12 +186,12 @@
       NoOfPackages:          "2661",
       TypeOfPackagesName:    "Box",
       T1:                    "",
-      T2Gross:               "Gross: 22012 Kg",
-      T2Net:                 "Net: 20710 Kg"
+      T2Gross:               "Gross:23538.6 Kg",
+      T2Net:                 "Net: 21942 Kg"
     }],
 
     EnglishProvinceName: "West Azerbaijan",
-    IssueNo:             "2602040594512",
+    IssueNo:             "2602040594517",
     ConfirmDateString:   "Sunday, November 22, 2026",
     ConfirmerEnglishName: "Saman gabrieli",
     ConfirmerUserCode:    "204"
@@ -206,23 +207,27 @@
       String(d.getMonth()+1).padStart(2,"0") + "-" +
       String(d.getDate()).padStart(2,"0");
   }
+  /* UTC formatter: d=1795219200000 → 2026-11-21 */
   function msToInputDateUTC(ms) {
     var d = new Date(ms);
     return d.getUTCFullYear() + "-" +
       String(d.getUTCMonth()+1).padStart(2,"0") + "-" +
       String(d.getUTCDate()).padStart(2,"0");
   }
+  /* Set date input robustly: clears first, sets, then re-sets after paint */
   function setDateInput(iso) {
     var el = document.getElementById("date");
     el.value = "";
     el.value = iso;
+    // Some browsers overwrite .value during their own init; re-apply.
     setTimeout(function () { el.value = iso; }, 0);
     setTimeout(function () { el.value = iso; }, 50);
   }
 
   function certificateHtml(sn, poi, dMs) {
-    var bgAbs = new URL("bgcopy.png", window.location.href).href;
-    var qrAbs = new URL("qrcode.png", window.location.href).href;
+    var base = window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
+    var bgAbs = new URL("bgcopy.png", base).href;
+    var qrAbs = new URL("qrcode.png", base).href;
 
     var EXP_ADDR_INDENT = "3px";
 
@@ -238,7 +243,8 @@
     });
 
     return "<!doctype html><html><head><meta charset='utf-8'>" +
-      "<title>E-Phyto " + escapeHtml(sn) + "</title>" +
+      "<base href='" + base + "'>" +
+      "<title>E-Phyto #2 - " + escapeHtml(sn) + "</title>" +
       "<style>" +
         "html,body{margin:0;padding:0;background:#2b2b2b;}" +
         ".toolbar{position:sticky;top:0;z-index:10;display:flex;gap:12px;align-items:center;" +
@@ -292,7 +298,7 @@
         "@media print{body{background:#fff;}.toolbar,.stage{display:none!important;}" +
           "#print-container{box-shadow:none;margin:0;}}" +
       "</style></head><body>" +
-      "<div class='toolbar'><h1>E-Phyto " + escapeHtml(sn) + "</h1>" +
+      "<div class='toolbar'><h1>E-Phyto #2 - " + escapeHtml(sn) + "</h1>" +
         "<button onclick='window.print()'>Print / Save as PDF</button></div>" +
       "<div class='stage'><div id='print-container'>" +
         "<img id='qrcode-image' alt='' src='" + qrAbs + "' " +
@@ -309,7 +315,8 @@
           escapeHtml(CERT.ConsigneeAddress3) + " <br>" +
           escapeHtml(CERT.ConsigneeAddress4) + " <br>" +
           escapeHtml(CERT.ConsigneeAddress5) + " <br>" +
-          escapeHtml(CERT.ConsigneeAddress6) + "</div>" +
+          escapeHtml(CERT.ConsigneeAddress6) + " <br>" +
+          escapeHtml(CERT.ConsigneeAddress7) + "</div>" +
         "<div class='part' id='p3'>" + escapeHtml(CERT.CountryEnglishName) + "</div>" +
         "<div class='part' id='p4'>" + escapeHtml(CERT.SourceCountryEnglishName) + "</div>" +
         "<div class='part' id='p5'>" + escapeHtml(CERT.TConveyance11) + "</div>" +
@@ -341,7 +348,7 @@
     var box = document.getElementById("result");
     if (kind === "found") {
       box.style.display = "";
-      box.innerHTML = '<code>Certificate exists. <span class="link" id="view-doc">(view document)</span></code>';
+      box.innerHTML = '<code>Certificate exists. <span class="link" id="view-doc">(view document #2)</span></code>';
       document.getElementById("view-doc").onclick = function () {
         var w = window.open("", "_blank");
         if (!w) { alert("Please allow pop-ups for this site."); return; }
@@ -358,8 +365,9 @@
     }
   }
 
+  /* URL contract: ?d= is UTC midnight ms for the chosen day */
   function currentDateMs() {
-    var v = document.getElementById("date").value;
+    var v = document.getElementById("date").value;   // yyyy-mm-dd
     if (!v) return Date.now();
     var p = v.split("-");
     return Date.UTC(+p[0], +p[1]-1, +p[2]);
@@ -372,6 +380,7 @@
     var dMs = q.get("d") ? parseInt(q.get("d"),10) : Date.now();
     document.getElementById("sn").value = sn;
     document.getElementById("poi").value = poi;
+    /* UTC format + robust apply (see setDateInput) */
     setDateInput(msToInputDateUTC(dMs));
     return { sn: sn, poi: poi, dMs: dMs };
   }
@@ -388,7 +397,7 @@
     if (updateUrl) writeUrlParams(sn, poi, dMs);
     setResult("loading");
     setTimeout(function () {
-      if (sn === "053636232") setResult("found", sn, poi, dMs);
+      if (sn === "053636236") setResult("found", sn, poi, dMs);
       else setResult("notFound");
     }, 400);
   }
@@ -403,6 +412,7 @@
   });
 
   (function () {
+    // Default date = today (local); URL wins if ?d= is present.
     setDateInput(toInputDate(new Date()));
     var p = readUrlParams();
     if (p.sn) doSearch(p.sn, p.poi, p.dMs, false);
